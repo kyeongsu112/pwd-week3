@@ -82,7 +82,7 @@ function SubmissionsPage() {
     },
     onSuccess: () => {
       toast.success('승인하여 레스토랑에 등록했습니다.');
-      queryClient.invalidateQueries({ queryKey: ['submissions'] });
+      queryClient.invalidateQueries({ queryKey: ['submissions'], exact: false });
       queryClient.invalidateQueries({ queryKey: ['restaurants'] });
     }
   });
@@ -91,7 +91,8 @@ function SubmissionsPage() {
     mutationFn: ({ id }) => submissionAPI.updateSubmission(id, { status: 'rejected' }),
     onSuccess: () => {
       toast.info('제보를 거절했습니다.');
-      queryClient.invalidateQueries({ queryKey: ['submissions'] });
+      queryClient.invalidateQueries({ queryKey: ['submissions'], exact: false });
+
     }
   });
 
@@ -99,7 +100,8 @@ function SubmissionsPage() {
     mutationFn: (id) => submissionAPI.deleteSubmission(id),
     onSuccess: () => {
       toast.info('제보를 삭제했습니다.');
-      queryClient.invalidateQueries({ queryKey: ['submissions'] });
+      queryClient.invalidateQueries({ queryKey: ['submissions'], exact: false });
+
     }
   });
 
