@@ -1,3 +1,4 @@
+// src/components/SubmitRestaurant.jsx
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
@@ -143,6 +144,7 @@ function SubmitRestaurant() {
         review: data.review?.trim() || undefined,
         submitterName: data.submitterName?.trim() || undefined,
         submitterEmail: data.submitterEmail?.trim() || undefined,
+        status: 'pending',   // ✅ 추가된 부분
       };
 
       await submissionAPI.createSubmission(payload);
@@ -175,7 +177,6 @@ function SubmitRestaurant() {
       <FormTitle>🍽️ 새로운 맛집 제보하기</FormTitle>
       
       <form onSubmit={handleSubmit(onSubmit)}>
-        
         <FormGroup>
           <Label htmlFor="restaurantName">맛집 이름 *</Label>
           <Input
@@ -245,7 +246,6 @@ function SubmitRestaurant() {
           />
         </FormGroup>
 
-        
         <FormGroup>
           <Label htmlFor="review">한줄평</Label>
           <Textarea
