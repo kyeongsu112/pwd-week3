@@ -1,8 +1,7 @@
-//src/pages/SubmissionsPage.jsx
 import React, { useMemo, useState } from 'react';
 import styled from '@emotion/styled';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { submissionAPI, restaurantAPI } from '../services/api';
+import { submissionAPI } from '../services/api';
 import { toast } from 'react-toastify';
 
 const Container = styled.div`
@@ -69,20 +68,11 @@ function SubmissionsPage() {
 
   const approveMutation = useMutation({
     mutationFn: async (submission) => {
-      const payload = {
-        name: submission.restaurantName,
-        category: submission.category,
-        location: submission.location,
-        priceRange: submission.priceRange || undefined,
-        description: submission.review || undefined,
-        recommendedMenu: Array.isArray(submission.recommendedMenu) ? submission.recommendedMenu : undefined,
-      };
-      await restaurantAPI.createRestaurant(payload);
       await submissionAPI.updateSubmission(submission.id, { status: 'approved' });
     },
     onSuccess: () => {
       toast.success('승인하여 레스토랑에 등록했습니다.');
-      queryClient.invalidateQueries({ queryKey: ['submissions'], exact: false });
+      queryClient.invalidateQueries({ queryKey: ['submissions'] });
       queryClient.invalidateQueries({ queryKey: ['restaurants'] });
     }
   });
@@ -91,8 +81,7 @@ function SubmissionsPage() {
     mutationFn: ({ id }) => submissionAPI.updateSubmission(id, { status: 'rejected' }),
     onSuccess: () => {
       toast.info('제보를 거절했습니다.');
-      queryClient.invalidateQueries({ queryKey: ['submissions'], exact: false });
-
+      queryClient.invalidateQueries({ queryKey: ['submissions'] });
     }
   });
 
@@ -100,8 +89,7 @@ function SubmissionsPage() {
     mutationFn: (id) => submissionAPI.deleteSubmission(id),
     onSuccess: () => {
       toast.info('제보를 삭제했습니다.');
-      queryClient.invalidateQueries({ queryKey: ['submissions'], exact: false });
-
+      queryClient.invalidateQueries({ queryKey: ['submissions'] });
     }
   });
 
